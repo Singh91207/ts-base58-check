@@ -30,3 +30,10 @@ The trade-off is integrity strength: a one-byte checksum catches 255 out of 256 
 ## Edge cases
 
 Leading zero bytes are significant and are preserved: each one becomes a leading `1` (Bitcoin) or `r` (Ripple) in the encoded string. An empty decoded result is rejected because it cannot carry a checksum byte. Invalid characters and checksum mismatches throw `Error`; type and range problems throw `TypeError` or `RangeError`.
+
+## Performance
+
+The window keeps a bounded buffer, so `push` is constant time and memory does not
+grow with the length of the stream. `peak` and `trough` are linear in the window
+size, which is the trade that keeps `push` cheap.
+
